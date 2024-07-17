@@ -5,7 +5,7 @@
 Clone this repository to your working directory
 
 ```bash
-git clone
+git clone https://github.com/MatthiasDR96/uf_edge_ml_demo.git
 ```
 
 Build a Docker image and push it to the Docker registry
