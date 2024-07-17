@@ -1,0 +1,483 @@
+{
+  "images": [
+    {
+      "width": 1280,
+      "height": 1024,
+      "id": 0,
+      "file_name": "images\\b6965a5f-Picture_1.jpg"
+    },
+    {
+      "width": 1280,
+      "height": 1024,
+      "id": 1,
+      "file_name": "images\\db0b955e-Picture_2.jpg"
+    },
+    {
+      "width": 1280,
+      "height": 1024,
+      "id": 2,
+      "file_name": "images\\afaee292-Picture_3.jpg"
+    },
+    {
+      "width": 1280,
+      "height": 1024,
+      "id": 3,
+      "file_name": "images\\ffe5a7bd-Picture_4.jpg"
+    },
+    {
+      "width": 1280,
+      "height": 1024,
+      "id": 4,
+      "file_name": "images\\41ee7f96-Picture_5.jpg"
+    },
+    {
+      "width": 1280,
+      "height": 1024,
+      "id": 5,
+      "file_name": "images\\0710e3e6-Picture_6.jpg"
+    },
+    {
+      "width": 1280,
+      "height": 1024,
+      "id": 6,
+      "file_name": "images\\ea037e28-Picture_7.jpg"
+    },
+    {
+      "width": 1280,
+      "height": 1024,
+      "id": 7,
+      "file_name": "images\\348c5d8b-Picture_8.jpg"
+    },
+    {
+      "width": 1280,
+      "height": 1024,
+      "id": 8,
+      "file_name": "images\\d13df2a5-Picture_9.jpg"
+    },
+    {
+      "width": 1280,
+      "height": 1024,
+      "id": 9,
+      "file_name": "images\\76546a6b-Picture_10.jpg"
+    },
+    {
+      "width": 1280,
+      "height": 1024,
+      "id": 10,
+      "file_name": "images\\346a6b4a-Picture_11.jpg"
+    },
+    {
+      "width": 1280,
+      "height": 1024,
+      "id": 11,
+      "file_name": "images\\b42cefcb-Picture_12.jpg"
+    },
+    {
+      "width": 1280,
+      "height": 1024,
+      "id": 12,
+      "file_name": "images\\913549e3-Picture_13.jpg"
+    },
+    {
+      "width": 1280,
+      "height": 1024,
+      "id": 13,
+      "file_name": "images\\87a1ad33-Picture_14.jpg"
+    },
+    {
+      "width": 1280,
+      "height": 1024,
+      "id": 14,
+      "file_name": "images\\593ee0a6-Picture_15.jpg"
+    },
+    {
+      "width": 1280,
+      "height": 1024,
+      "id": 15,
+      "file_name": "images\\4e803e34-Picture_16.jpg"
+    },
+    {
+      "width": 1280,
+      "height": 1024,
+      "id": 16,
+      "file_name": "images\\56c8db5e-Picture_17.jpg"
+    },
+    {
+      "width": 1280,
+      "height": 1024,
+      "id": 17,
+      "file_name": "images\\cb37c396-Picture_18.jpg"
+    },
+    {
+      "width": 1280,
+      "height": 1024,
+      "id": 18,
+      "file_name": "images\\8af0a894-Picture_19.jpg"
+    },
+    {
+      "width": 1280,
+      "height": 1024,
+      "id": 19,
+      "file_name": "images\\df978d98-Picture_20.jpg"
+    },
+    {
+      "width": 1280,
+      "height": 1024,
+      "id": 20,
+      "file_name": "images\\2d6e075d-Picture_21.jpg"
+    },
+    {
+      "width": 1280,
+      "height": 1024,
+      "id": 21,
+      "file_name": "images\\1b190810-Picture_22.jpg"
+    },
+    {
+      "width": 1280,
+      "height": 1024,
+      "id": 22,
+      "file_name": "images\\701a533b-Picture_23.jpg"
+    },
+    {
+      "width": 1280,
+      "height": 1024,
+      "id": 23,
+      "file_name": "images\\5ac5e930-Picture_24.jpg"
+    },
+    {
+      "width": 1280,
+      "height": 1024,
+      "id": 24,
+      "file_name": "images\\5f5b9eb9-Picture_25.jpg"
+    },
+    {
+      "width": 1280,
+      "height": 1024,
+      "id": 25,
+      "file_name": "images\\8355613c-Picture_26.jpg"
+    },
+    {
+      "width": 1280,
+      "height": 1024,
+      "id": 26,
+      "file_name": "images\\c18e3521-Picture_27.jpg"
+    },
+    {
+      "width": 1280,
+      "height": 1024,
+      "id": 27,
+      "file_name": "images\\5f668f39-Picture_28.jpg"
+    },
+    {
+      "width": 1280,
+      "height": 1024,
+      "id": 28,
+      "file_name": "images\\9b60e8a6-Picture_29.jpg"
+    },
+    {
+      "width": 1280,
+      "height": 1024,
+      "id": 29,
+      "file_name": "images\\d76d5c23-Picture_30.jpg"
+    },
+    {
+      "width": 1280,
+      "height": 1024,
+      "id": 30,
+      "file_name": "images\\a5738118-Picture_31.jpg"
+    },
+    {
+      "width": 1280,
+      "height": 1024,
+      "id": 31,
+      "file_name": "images\\ac889c1e-Picture_32.jpg"
+    },
+    {
+      "width": 1280,
+      "height": 1024,
+      "id": 32,
+      "file_name": "images\\1ae6937a-Picture_33.jpg"
+    },
+    {
+      "width": 1280,
+      "height": 1024,
+      "id": 33,
+      "file_name": "images\\51b0eb8e-Picture_34.jpg"
+    },
+    {
+      "width": 1280,
+      "height": 1024,
+      "id": 34,
+      "file_name": "images\\2b6c7d90-Picture_35.jpg"
+    }
+  ],
+  "categories": [
+    {
+      "id": 0,
+      "name": "Empty carrier"
+    },
+    {
+      "id": 1,
+      "name": "Fuse"
+    },
+    {
+      "id": 2,
+      "name": "No PCB"
+    },
+    {
+      "id": 3,
+      "name": "No carrier"
+    },
+    {
+      "id": 4,
+      "name": "No cellphone"
+    },
+    {
+      "id": 5,
+      "name": "No fuses"
+    },
+    {
+      "id": 6,
+      "name": "One fuse"
+    },
+    {
+      "id": 7,
+      "name": "Two fuses"
+    }
+  ],
+  "annotations": [
+    {
+      "id": 0,
+      "image_id": 5,
+      "category_id": 1,
+      "segmentation": [],
+      "bbox": [
+        622.6834030683403,
+        147.1018131101813,
+        188.51882845188283,
+        55.69874476987448
+      ],
+      "ignore": 0,
+      "iscrowd": 0,
+      "area": 10500.262110257172
+    },
+    {
+      "id": 1,
+      "image_id": 6,
+      "category_id": 1,
+      "segmentation": [],
+      "bbox": [
+        626.9679218967922,
+        345.6178521617852,
+        174.23709902370982,
+        52.842398884239955
+      ],
+      "ignore": 0,
+      "iscrowd": 0,
+      "area": 9207.10628704369
+    },
+    {
+      "id": 2,
+      "image_id": 7,
+      "category_id": 1,
+      "segmentation": [],
+      "bbox": [
+        622.6834030683403,
+        579.8382147838215,
+        168.52440725244068,
+        45.701534170153394
+      ],
+      "ignore": 0,
+      "iscrowd": 0,
+      "area": 7701.8239565522645
+    },
+    {
+      "id": 3,
+      "image_id": 8,
+      "category_id": 1,
+      "segmentation": [],
+      "bbox": [
+        614.1143654114364,
+        771.2133891213389,
+        162.81171548117163,
+        52.842398884239955
+      ],
+      "ignore": 0,
+      "iscrowd": 0,
+      "area": 8603.361612483457
+    },
+    {
+      "id": 4,
+      "image_id": 9,
+      "category_id": 1,
+      "segmentation": [],
+      "bbox": [
+        626.9679218967922,
+        305.629009762901,
+        168.5244072524408,
+        49.9860529986053
+      ],
+      "ignore": 0,
+      "iscrowd": 0,
+      "area": 8423.86995247905
+    },
+    {
+      "id": 5,
+      "image_id": 10,
+      "category_id": 1,
+      "segmentation": [],
+      "bbox": [
+        635.536959553696,
+        317.0543933054393,
+        159.955369595537,
+        38.56066945606697
+      ],
+      "ignore": 0,
+      "iscrowd": 0,
+      "area": 6167.986134696527
+    },
+    {
+      "id": 6,
+      "image_id": 10,
+      "category_id": 1,
+      "segmentation": [],
+      "bbox": [
+        632.6806136680614,
+        404.17294281729426,
+        155.670850767085,
+        49.9860529986053
+      ],
+      "ignore": 0,
+      "iscrowd": 0,
+      "area": 7781.371396781487
+    },
+    {
+      "id": 7,
+      "image_id": 11,
+      "category_id": 1,
+      "segmentation": [],
+      "bbox": [
+        618.3988842398884,
+        841.1938633193863,
+        152.81450488145055,
+        47.12970711297079
+      ],
+      "ignore": 0,
+      "iscrowd": 0,
+      "area": 7202.102857676409
+    },
+    {
+      "id": 8,
+      "image_id": 11,
+      "category_id": 1,
+      "segmentation": [],
+      "bbox": [
+        619.8270571827057,
+        916.8870292887029,
+        147.10181311018124,
+        54.27057182705728
+      ],
+      "ignore": 0,
+      "iscrowd": 0,
+      "area": 7983.299514286447
+    },
+    {
+      "id": 9,
+      "image_id": 12,
+      "category_id": 1,
+      "segmentation": [],
+      "bbox": [
+        625.5397489539748,
+        652.6750348675035,
+        154.24267782426787,
+        49.9860529986053
+      ],
+      "ignore": 0,
+      "iscrowd": 0,
+      "area": 7709.982668370657
+    },
+    {
+      "id": 10,
+      "image_id": 12,
+      "category_id": 1,
+      "segmentation": [],
+      "bbox": [
+        622.6834030683403,
+        742.649930264993,
+        155.67085076708508,
+        41.41701534170163
+      ],
+      "ignore": 0,
+      "iscrowd": 0,
+      "area": 6447.4220144761075
+    },
+    {
+      "id": 11,
+      "image_id": 13,
+      "category_id": 1,
+      "segmentation": [],
+      "bbox": [
+        628.3960948396095,
+        487.00697350069737,
+        161.38354253835422,
+        49.9860529986053
+      ],
+      "ignore": 0,
+      "iscrowd": 0,
+      "area": 8066.9263104248475
+    },
+    {
+      "id": 12,
+      "image_id": 13,
+      "category_id": 1,
+      "segmentation": [],
+      "bbox": [
+        624.1115760111577,
+        572.697350069735,
+        164.23988842398873,
+        41.41701534170156
+      ],
+      "ignore": 0,
+      "iscrowd": 0,
+      "area": 6802.325978575694
+    },
+    {
+      "id": 13,
+      "image_id": 14,
+      "category_id": 1,
+      "segmentation": [],
+      "bbox": [
+        629.8242677824268,
+        264.21199442119945,
+        177.09344490934447,
+        44.27336122733614
+      ],
+      "ignore": 0,
+      "iscrowd": 0,
+      "area": 7840.52205746476
+    },
+    {
+      "id": 14,
+      "image_id": 14,
+      "category_id": 1,
+      "segmentation": [],
+      "bbox": [
+        631.2524407252441,
+        357.0432357043236,
+        165.66806136680606,
+        49.98605299860523
+      ],
+      "ignore": 0,
+      "iscrowd": 0,
+      "area": 8281.09249565735
+    }
+  ],
+  "info": {
+    "year": 2024,
+    "version": "1.0",
+    "description": "",
+    "contributor": "Label Studio",
+    "url": "",
+    "date_created": "2024-03-19 16:06:53.085722"
+  }
+}

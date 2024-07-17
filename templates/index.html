@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Machine Vision for Quality Control</title>
+    <link rel="stylesheet" href="static/index.css">
+</head>
+
+<body>
+
+    <header>
+        <div class="title-container">
+          <img src="static/logo_mgroup.png" alt="Logo2" class="logo">
+          <h1>Edge ML Model</h1>
+          <img src="static/logo_kuleuven.png" alt="Logo1" class="logo">
+        </div>
+    </header>
+
+    <div class="container">
+
+        <div class="video-container">
+            <img id="video" src="{{ url_for('video') }}", alt="Video stream not available", style="max-width:100%; max-height:100%">
+        </div>
+        
+        <div class="controls">
+
+            <div class="left-column">
+
+                <button id="capture">Capture</button>
+
+                <button id="delete">Delete</button>
+
+                <div class="dropdown-content">
+                    <select id="category">
+                        {% for option in options %}
+                        <option value="{{ option }}">{{ option }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <p id="image-count"> {{ count }} </p>
+
+            </div>
+
+            <div class="right-column">
+
+                <button id="train">Train</button>
+
+                <p id="model-status"> {{ status }} </p>
+
+                <p id="model_accuracy"> {{ accuracy }} </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        // Capture button action
+        document.getElementById('capture').addEventListener('click', function() {
+            fetch('/capture', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'category=' + document.getElementById('category').value
+                
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('image-count').textContent = data.count + ' images';
+            });
+        });
+
+        // Delete button action
+        document.getElementById('delete').addEventListener('click', function() {
+            fetch('/delete', { method: 'POST' })
+            .then(response => response.json())
+        });
+
+        // Dropdown action
+        document.getElementById('category').addEventListener('click', function() {
+            fetch('/drop-down', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'category=' + document.getElementById('category').value
+                
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('image-count').textContent = data.count + ' images';
+            });
+        });
+
+        // Train button action
+        document.getElementById('train').addEventListener('click', function() {
+            document.getElementById('model-status').textContent = 'Training ...';
+            fetch('/train', { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('model_accuracy').textContent = data.model_accuracy;
+                document.getElementById('model-status').textContent = data.model_status;
+            });
+        });
+
+    </script>
+
+</body>
+</html>
