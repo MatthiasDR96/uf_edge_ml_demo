@@ -2,13 +2,13 @@
 
 ## Installation
 
-Clone this repository to your working directory
+Clone this repository to your local working directory.
 
 ```bash
 git clone https://github.com/MatthiasDR96/uf_edge_ml_demo.git
 ```
 
-Build a Docker image and push it to the Docker registry
+Download and install Docker on your local machine. Build a Docker image and push it to the Docker registry.
 
 ```bash
 docker login
@@ -23,9 +23,13 @@ On the remote host, pull the image
 ssh user@remote-server
 docker login
 docker pull username/my-app:latest
-docker run --runtime nvidia -it --rm -p 8000:8000 --device /dev/video0 username/my-app:latest 
+docker run --runtime nvidia -it --rm -p 8000:8000 -p 5000:5000 -p 6006:6006 --ipc=host --device /dev/video0 username/my-app:latest 
 ```
 
 ## Usage
 
-Once the Docker container runs on the remote host, the webserver can be accessed via <host-ip>:8000. To change the classes of the model, the classes.txt file in './data/' can be modified. 
+Once the Docker container runs on the remote host:
+* The webserver can be accessed via: <host-ip>:8000;
+* Label studio can be accessed via: <host-ip>:8080;
+* Tensorboard can be accessed via: <host-ip>:6006;
+* MLFlow can be accessed via: <host-ip>:5000.

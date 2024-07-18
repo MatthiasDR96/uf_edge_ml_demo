@@ -2,35 +2,11 @@
   "categories": [
     {
       "id": 0,
-      "name": "Empty carrier"
+      "name": "Apple"
     },
     {
       "id": 1,
-      "name": "Fuse"
-    },
-    {
-      "id": 2,
-      "name": "No PCB"
-    },
-    {
-      "id": 3,
-      "name": "No carrier"
-    },
-    {
-      "id": 4,
-      "name": "No cellphone"
-    },
-    {
-      "id": 5,
-      "name": "No fuses"
-    },
-    {
-      "id": 6,
-      "name": "One fuse"
-    },
-    {
-      "id": 7,
-      "name": "Two fuses"
+      "name": "Bottle"
     }
   ],
   "info": {

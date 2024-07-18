@@ -1,7 +1,32 @@
 # Imports
 import os
+import json
+import yaml
 import shutil
 import numpy as np
+
+def overwrite_dataset_yaml():
+
+    # Open and read the JSON file
+    with open('./data/detection/notes.json', 'r') as json_file:
+        data_json = json.load(json_file)
+
+    # Open and read the YAML file
+    with open('./data/dataset.yaml', 'r') as file:
+        data_yaml = yaml.safe_load(file)
+
+    # Extract the categories
+    categories = data_json['categories']
+
+    # Loop through each category
+    data_yaml['names'] = {}
+    for category in categories:
+        # Add the id and name to the output
+        data_yaml['names'][str(category['id'])] = category['name']
+
+    # Open and write to the YAML file
+    with open('./data/dataset.yaml', 'w') as yaml_file:
+        yaml.dump(data_yaml, yaml_file, default_flow_style=False)
 
 def split_data(source_dir, target_dirs, split_ratio=(0.7, 0.2, 0.1)):
 

@@ -19,34 +19,22 @@ ls = LabelStudio(base_url=LABEL_STUDIO_URL, api_key=API_KEY)
 # Define labeling interface
 label_config = """
 <View>
-  <Image name="image" value="$image"/>
-  <RectangleLabels name="label" toName="image">
-    <Label value="Fuse" background="green"/>
-  </RectangleLabels>
+	<Image name="image" value="$image"/>
+	<RectangleLabels name="label" toName="image">
+		<Label value="Fuse" background="green"/>
+	</RectangleLabels>
 </View>
 """
 
 # Create a project with the specified title and labeling configuration
 #project = ls.projects.create(
-    #title='Fuse detection test',
-    #label_config=label_config
+		#title='Fuse detection test',
+		#label_config=label_config
 #)
 
 # Get a list of all projects
 projects = ls.projects.list()
 
 # Print each project's ID and title
-for project in projects:
-    print(f"ID: {project.id}, Title: {project.title}")
+tasks = ls.projects.get(14).export_tasks(export_type='YOLO', download_all_tasks=True)
 
-# Get all images
-image_paths = []
-for root, dirs, files in os.walk('./data/raw'):
-    for file in files:
-            image_paths.append({'image': os.path.join(root, file)})
-
-print(image_paths)
-
-ls.projects.import_tasks(
-    id=13,
-    request=[{'image': './NOK/NOK_04955515e4.jpg'}])

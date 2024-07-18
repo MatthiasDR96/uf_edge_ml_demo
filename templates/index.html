@@ -19,8 +19,19 @@
 
     <div class="container">
 
-        <div class="video-container">
-            <img id="video" src="{{ url_for('video') }}", alt="Video stream not available", style="max-width:100%; max-height:100%">
+        <div class="main-content">
+
+            <form method="POST" action="/classes">
+                <textarea id="textarea" name="classes_content"></textarea>
+                <div class="submit-container">
+                    <input id='submit_button' type="submit">
+                </div>
+            </form>
+    
+            <div class="video-container">
+                <img id="video" src="{{ url_for('video') }}", alt="Video stream not available", style="max-width:100%; max-height:100%">
+            </div>
+
         </div>
         
         <div class="controls">
@@ -46,6 +57,14 @@
             <div class="right-column">
 
                 <button id="train">Train</button>
+
+                <div class="dropdown-content">
+                    <select id="model">
+                        <option value="Detection">Detect</option>
+                        <option value="Classification">Classify</option>
+                        <option value="Segmentation">Segment</option>
+                    </select>
+                </div>
 
                 <p id="model-status"> {{ status }} </p>
 
@@ -81,9 +100,9 @@
             .then(response => response.json())
         });
 
-        // Dropdown action
+        // Dropdown category action
         document.getElementById('category').addEventListener('click', function() {
-            fetch('/drop-down', {
+            fetch('/drop-down-category', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
@@ -95,6 +114,19 @@
             .then(data => {
                 document.getElementById('image-count').textContent = data.count + ' images';
             });
+        });
+
+        // Dropdown model action
+        document.getElementById('model').addEventListener('click', function() {
+            fetch('/drop-down-model', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'model=' + document.getElementById('model').value
+                
+            })
+            .then(response => response.json())
         });
 
         // Train button action

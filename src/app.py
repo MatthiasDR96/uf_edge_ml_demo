@@ -4,27 +4,17 @@
 import os
 import cv2
 import time
-import subprocess
 import threading
 from utils import *
-from model import Model
+from model_yolo import Model
 from flask import Flask, render_template, Response, request
-
-# Start Mlflow server
-#os.system('mlflow ui')
 
 # Generate Flask app
 app = Flask(__name__, static_folder='../static', template_folder='../templates')
 
-# Params
-screen_size = (1920, 1080)
-
 # Generate Camera object
 camera = cv2.VideoCapture(0) #"/dev/video0", apiPreference=cv2.CAP_V4L2)  # use 0 for web camera
 time.sleep(2.0)
-
-# Generate model object
-model = Model()
 
 # Generate frames
 global frame_saved
@@ -48,7 +38,11 @@ def generate_frames():
 			frame_saved = frame.copy()
 
 			# Annotate frame
-			frame = model.model_inference(frame)
+			try:
+				# Predict
+				frame = model.model_inference(frame)
+			except:
+				continue
 
 			# Resize image to fit screen
 			frame_resized = cv2.resize(frame, screen_size)  
@@ -61,7 +55,7 @@ def generate_frames():
 
 @app.route('/')
 def index():
-	with open('./data/classes.txt', 'r') as f: options = [line.strip() for line in f]
+	options = os.listdir('./data/raw')
 	return render_template('index.html', options=options, count='x images', status='Not trained', accuracy='0%')
 
 @app.route('/video')
@@ -76,6 +70,7 @@ def capture():
 
 	# Get category
 	category = request.form.get('category')
+	category = category.strip('\n')
 
 	# Check if category exist
 	if not os.path.exists('./data/raw/' + category): os.makedirs('./data/raw/' + category)
@@ -100,8 +95,8 @@ def delete():
 
 	return ('', 204)
 
-@app.route('/drop-down', methods=['POST'])
-def dropdown():
+@app.route('/drop-down-category', methods=['POST'])
+def dropdown_category():
 
 	# Get category
 	category = request.form.get('category')
@@ -114,6 +109,18 @@ def dropdown():
 
 	return {'count': count}
 
+@app.route('/drop-down-model', methods=['POST'])
+def dropdown_model():
+
+	# Get model type
+	model_type = request.form.get('model')
+
+	# Change model
+	model.type = model_type
+	model.model_change()
+
+	return ('', 204)
+
 @app.route('/train', methods=['POST'])
 def train():
 
@@ -123,22 +130,42 @@ def train():
 		# Split the data in train, valid, test datasets
 		split_data('data/raw', ['data/train', 'data/val', 'data/test'])
 
-		# Train model
-		best_acc = model.model_training()
+		# Modify dataset.yaml
+		overwrite_dataset_yaml()
 
-		return {'model_status': 'Finished', 'model_accuracy': str(best_acc) + '%'}
+		# Train model
+		thread = threading.Thread(target=model.model_training)
+		thread.start()
+
+		return {'model_status': 'Finished', 'model_accuracy': str(100) + '%'}
 	
 	else:
 		
 		return {'model_status': 'No data', 'model_accuracy': str(0.0) + '%'}
+	
+@app.route('/classes', methods=['POST'])
+def get_textarea():
 
+	# Get text
+	text = request.form.get('classes_content')
+	text = text.strip('\r')
 
-def run_command(command):
-	process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
-	process.wait()
+	# Get classes
+	options = text.split("\n")
+
+	return render_template('index.html', options=options, count='x images', status='Not trained', accuracy='0%')
 
 
 if __name__ == "__main__":
+
+	# Params
+	screen_size = (1920, 1080)
+
+	# Generate model object
+	model = Model()
+
+	# Run app
 	app.run(host='0.0.0.0', port=8000)
 
+# Close camera
 camera.release()

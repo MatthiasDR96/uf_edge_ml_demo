@@ -1,7 +1,0 @@
-path: C:\Users\matth\OneDrive - KU Leuven\Python_Projects\fuse_detection/data/detection/images  
-train: ./
-val: ./
-
-names: 
-  0: One fuse
-  1: Two fuses

@@ -41,102 +41,101 @@ header {
     height: 90vh;
 }
 
-.video-container {
-    max-width: 100%; /* This will limit the width to the parent container's width */
-    max-height: 90%; /* Adjust this value according to your needs */
-    overflow: hidden; /* This will hide anything that exceeds the max-width and max-height */
+.main-content {
+    display: flex;
+    justify-content: left;
+    width: 100%;
+    height: 90%;
+    max-width: 96vw;
 }
+
+form {
+    display: flex;
+    margin-right: 5%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+textarea {
+    height: 10%;
+}
+
+input{
+    padding: 10px 15px;
+    font-size: 120%;
+    background-color: #52BDEC; /* Green */
+    color: white;
+    text-align: center;
+    border-radius: 10px; /* Optional: Round the corners */
+}
+
+.video-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Control panel */
 
 .controls {
     display: flex;
     justify-content: center;
-    width: 100vh;
-    height: 10vh;
+    width: 100%;
+    height: 10%;
 }
 
 .left-column, .right-column {
     display: flex;
     align-items: center;
-    min-width: 47vw;
+    min-width: 48vw;
     border: 2px solid #000; /* Add a border */
     border-radius: 10px; /* Optional: Round the corners */
-    padding: 0 20px; /* Add padding to the left and right */
+    padding-left: 20px;
 }
+
+/* Text */
 
 p{
-    display: flex;
-    width: 15%;
+    width: 25%;
+    padding: 10px 15px;
+    margin-right: 20px;
     font-size: 1.15rem;
-    padding: 0.675em 6em 0.675em 1em;
     background-color: #fff;
     color: #000;
-    margin-left: 50px;
-    overflow: hidden;
 }
 
-/* Capture button */
+/* Buttons */
 
-#capture {
+#capture, #delete, #train{
+    width: 25%;
+    padding: 10px 15px;
+    margin-right: 20px;
+    font-size: 120%;
     background-color: #52BDEC; /* Green */
     color: white;
-    padding: 10px 15px;
     text-align: center;
-    font-size: 120%;
-    width: 20%;
     border-radius: 10px; /* Optional: Round the corners */
 }
 
-#capture:active{
-    background-color:#00407A;
-}
-
-/* Delete button */
-
-#delete {
-    background-color: #52BDEC; /* Green */
-    color: white;
-    padding: 10px 15px;
-    text-align: center;
-    font-size: 120%;
-    width: 20%;
-    border-radius: 10px; /* Optional: Round the corners */
-}
-
-#delete:active{
-    background-color:#00407A;
-}
-
-/* Train button */
-
-#train {
-    background-color: #52BDEC; /* Green */
-    color: white;
-    padding: 10px 15px;
-    text-align: center;
-    font-size: 120%;
-    width: 20%;
-    border-radius: 10px; /* Optional: Round the corners */
-}
-
-#train:active{
+#capture:active, #delete:active, #train:active{
     background-color:#00407A;
 }
 
 /* Dropdown */
 
 .dropdown-content {
-    display: flex;
     width: 25%;
-    margin-left: 50px;
+    margin-right: 20px;
     overflow: hidden;
 }
   
 .dropdown-content select {
-    appearance: none;
     width: 100%;
+    padding: 10px 15px;
     font-size: 1.15rem;
-    padding: 0.675em 6em 0.675em 1em;
     background-color: #fff;
     color: #000;
+    appearance: none;
     cursor: pointer;
 }

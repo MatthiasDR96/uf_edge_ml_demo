@@ -1,8 +1,0 @@
-path: C:\Users\matth\OneDrive - KU Leuven\Python_Projects\app\data\detection\images
-train: ./
-val: ./
-test: ./
-
-names: 
-  0: OK
-  1: NOK
