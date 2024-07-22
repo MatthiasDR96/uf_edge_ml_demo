@@ -5,4 +5,8 @@ runs/
 models/classify/
 models/detect/
 models/segment/
+data/test/
+data/train/
+data/val/
 data/detection2/
+raw/*/
