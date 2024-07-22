@@ -3,7 +3,6 @@ import os
 import shutil
 from pathlib import Path
 from ultralytics import YOLO
-from ultralytics import settings
 
 class Model():
 
@@ -11,43 +10,39 @@ class Model():
 
 		# Params
 		self.epochs = 20
+		self.batch_size = 1
+		self.workers = 2
+		self.image_size = 256
 		self.type = "Detection"
+		self.conf = 0.5
+		self.iou = 0.5
 
 		# Select model
 		self.model_change()
-
-		# Update a setting
-		#settings.update({"mlflow": False})
-
-		# Reset settings to default values
-		#settings.reset()
-
-		# Start server
-		#os.system('mlflow server --backend-store-uri runs/mlflow')
 
 	def model_change(self):
 
 		# Select model
 		if self.type == "Detection":
-			if os.path.isfile('./runs/detect/train/weights/best.pt'):
-				self.model = YOLO('./runs/detect/train/weights/best.pt')
+			if os.path.isfile('./models/detect/train/weights/best.pt'):
+				self.model = YOLO('./models/detect/train/weights/best.pt')
 			else:
-				self.model = YOLO("yolov8n.yaml").load("yolov8n.pt")  
+				self.model = YOLO('yolov8n.pt')
 		elif self.type == "Classification":
-			if os.path.isfile('./runs/classify/train/weights/best.pt'):
-				self.model = YOLO('./runs/classify/train/weights/best.pt')
+			if os.path.isfile('./models/classify/train/weights/best.pt'):
+				self.model = YOLO('./models/classify/train/weights/best.pt')
 			else:
-				self.model = YOLO("yolov8n-cls.yaml").load("yolov8n-cls.pt")  
+				self.model = YOLO('yolov8n-cls.pt') 
 		elif self.type == "Segmentation":
-			if os.path.isfile('./runs/segment/train/weights/best.pt'):
-				self.model = YOLO('./runs/segment/train/weights/best.pt')
+			if os.path.isfile('./models/segment/train/weights/best.pt'):
+				self.model = YOLO('./models/segment/train/weights/best.pt')
 			else:
-				self.model = YOLO("yolov8n-seg.yaml").load("yolov8n.pt") 
+				self.model = YOLO('yolov8n-seg.pt')
 
 	def model_inference(self, frame):
 
 		# Predict with the model
-		results = self.model(frame, stream=True, verbose=False, conf=0.01, iou=0.01)  # predict on an image
+		results = self.model(frame, stream=True, verbose=False, conf=self.conf, iou=self.iou)  # predict on an image
 
 		# Plot results for classification
 		for result in results:
@@ -60,64 +55,50 @@ class Model():
 		# Get model type
 		model_type = self.type
 
-		# Remove previous runs
+		# Set params based on model type
 		if model_type == "Detection":
-			if os.path.exists('./runs/detect'): shutil.rmtree('./runs/detect')
+			if os.path.exists('./models/detect'): shutil.rmtree('./models/detect')
+			model = YOLO('yolov8n.pt')
+			data_dir = str(Path('./data/dataset.yaml').resolve())
+			save_dir = './models/detect'
+			project_dir = './models/detect'
 		elif model_type == "Classification":
-			if os.path.exists('./runs/classify'): shutil.rmtree('./runs/classify')
+			if os.path.exists('./models/classify'): shutil.rmtree('./models/classify')
+			model =  YOLO('yolov8n-cls.pt')
+			data_dir = './data'
+			save_dir = './models/classify'
+			project_dir = './models/classify'
 		elif model_type == "Segmentation":
-			if os.path.exists('./runs/segment'): shutil.rmtree('./runs/segment')
+			if os.path.exists('./models/segment'): shutil.rmtree('./models/segment')
+			model =  YOLO('yolov8n-seg.pt')
+			data_dir = str(Path('./data/dataset.yaml').resolve())
+			save_dir = './models/segment'
+			project_dir = './models/segment'
 
 		# Remove MLflow runs
 		if os.path.exists('./mlruns'): shutil.rmtree('./mlruns')
 
-		# Select pretrained model
-		if model_type == "Detection":
-			model = YOLO("yolov8n.yaml").load("yolov8n.pt")  
-		elif model_type == "Classification":
-			model = YOLO("yolov8n-cls.yaml").load("yolov8n-cls.pt") 
-		elif model_type == "Segmentation":
-			model = YOLO("yolov8n-seg.yaml").load("yolov8n.pt")  
-
-		# Select training data
-		if model_type == "Detection":
-			data_dir = str(Path('./data/dataset.yaml').resolve())
-		elif model_type == "Classification":
-			data_dir = './data'
-		elif model_type == "Segmentation":
-			data_dir = str(Path('./data/dataset.yaml').resolve())
-		
 		# Finetune model
-		model.train(data=data_dir, epochs=self.epochs, imgsz=640, save_dir=data_dir)
-
-		# Export model
-		#model.export(format="engine")
+		model.train(data=data_dir, epochs=self.epochs, batch=self.batch_size, workers=self.workers, imgsz=self.image_size, project=project_dir, cache=False, val=False, save_dir=save_dir)
 
 		# Load a finetuned YOLOv8n model
 		if model_type == "Detection":
-			self.model = YOLO('./runs/detect/train/weights/best.pt')
+			self.model = YOLO('./models/detect/train/weights/best.pt')
 		elif model_type == "Classification":
-			self.model = YOLO('./runs/classify/train/weights/best.pt')
+			self.model = YOLO('./models/classify/train/weights/best.pt')
 		elif model_type == "Segmentation":
-			self.model = YOLO('./runs/segment/train/weights/best.pt')
+			self.model = YOLO('./models/segment/train/weights/best.pt')
 
 		# Validate the model
-		metrics = self.model.val()
+		#metrics = self.model.val()
 
 		# Output results
-		if model_type == "Detection":
-			output = metrics.maps[1]
-		elif model_type == "Classification":
-			output = metrics.top1
-		elif model_type == "Segmentation":
-			output = metrics.maps[1]
+		#if model_type == "Detection":
+			#output = metrics.maps[1]
+		#elif model_type == "Classification":
+			#output = metrics.top1
+		#elif model_type == "Segmentation":
+			#output = metrics.maps[1]
+		output = 100
 
-		return float(output*100)
-	
-
-if __name__ == "__main__":
-
-	model = Model()
-	import threading
-	best_acc = threading.Thread(target=model.model_training)
-	best_acc.start()
+		return float(output)

@@ -17,7 +17,7 @@ COPY models/ /uf_edge_ml_demo/models/
 COPY src/ /uf_edge_ml_demo/src/
 COPY static/ /uf_edge_ml_demo/static/
 COPY templates/ /uf_edge_ml_demo/templates/
-COPY requirements.txt yolov8n-cls.pt yolov8n.pt /uf_edge_ml_demo/
+COPY requirements.txt yolov8n-seg.pt yolov8n-cls.pt yolov8n.pt /uf_edge_ml_demo/
 
 # Set file permissions
 RUN chmod +x /uf_edge_ml_demo/src/app.py
@@ -25,11 +25,15 @@ RUN chmod +x /uf_edge_ml_demo/src/app.py
 # Upgrade pip and install Python dependencies
 RUN pip3 install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 
+# Label studio local file sync
+ENV LABEL_STUDIO_LOCAL_FILES_SERVING_ENABLED="true"
+ENV LABEL_STUDIO_LOCAL_FILES_DOCUMENT_ROOT="/uf_edge_ml_demo/data"
+
 # Exposing port 8000 from the container
 EXPOSE 8000
 EXPOSE 5000
 EXPOSE 6006
 
 # To run the application directly
-#ENTRYPOINT [ "python" ]
-#CMD ["app.py"]
+#ENTRYPOINT [ "python3" ]
+#CMD ["./src/app.py"]

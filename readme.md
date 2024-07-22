@@ -23,13 +23,9 @@ On the remote host, pull the image
 ssh user@remote-server
 docker login
 docker pull username/my-app:latest
-docker run --runtime nvidia -it --rm -p 8000:8000 -p 5000:5000 -p 6006:6006 --ipc=host --device /dev/video0 username/my-app:latest 
+docker run --gpus all --runtime nvidia -it --rm -p 8000:8000 --ipc=host --device /dev/video0 username/my-app:latest 
 ```
 
 ## Usage
 
-Once the Docker container runs on the remote host:
-* The webserver can be accessed via: <host-ip>:8000;
-* Label studio can be accessed via: <host-ip>:8080;
-* Tensorboard can be accessed via: <host-ip>:6006;
-* MLFlow can be accessed via: <host-ip>:5000.
+Once the Docker container runs on the remote host, the webserver can be accessed via: <host-ip>:8000. It can take a while before the stream starts.

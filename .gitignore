@@ -2,3 +2,7 @@
 *.pt
 __pycache__/
 runs/
+models/classify/
+models/detect/
+models/segment/
+data/detection2/

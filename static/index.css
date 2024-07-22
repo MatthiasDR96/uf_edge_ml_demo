@@ -57,11 +57,19 @@ form {
     align-items: center;
 }
 
+.label-container {
+    display: flex;
+    margin-left: 5%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 textarea {
     height: 10%;
 }
 
-input{
+input, #label, #download_label{
     padding: 10px 15px;
     font-size: 120%;
     background-color: #52BDEC; /* Green */
@@ -118,7 +126,7 @@ p{
     border-radius: 10px; /* Optional: Round the corners */
 }
 
-#capture:active, #delete:active, #train:active{
+#input:active, #download_label:active, label:active, #capture:active, #delete:active, #train:active{
     background-color:#00407A;
 }
 
