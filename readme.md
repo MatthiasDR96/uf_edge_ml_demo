@@ -25,7 +25,22 @@ docker login
 docker pull username/my-app:latest
 docker run --gpus all --runtime nvidia -it --rm -p 8000:8000 --ipc=host --device /dev/video0 username/my-app:latest 
 ```
-
 ## Usage
 
-Once the Docker container runs on the remote host, the webserver can be accessed via: <host-ip>:8000. It can take a while before the stream starts.
+Once the Docker container runs on the remote host, the webserver can be accessed via: hostname:8000. It can take a while before the stream starts.
+
+## Debugging
+
+For debugging, you can use the Visual Studio Code’s Remote - SSH extension to connect your local machine to your remote machine and use it as a development environment. This allows you to write code on your local machine, but run it on the remote machine. Copy the files in e.g. the src folder into your remote machine in a folder called e.g. uf_edge_ml_model via ssh:
+
+```bash
+scp -r ./src nano@ip-address:uf_edge_ml_model  
+```
+
+When starting the docker container, mount the working volume consisting of the files in / uf_edge_ml_model on the remote machine to the folder in the docker container where these files are located, e.g. /uf_edge_ml_demo/src. 
+
+```bash
+sudo docker run --gpus all --rm -it --runtime nvidia -p 8000:8000 -p 8080:8080 -p 6006:6006 -v $(pwd):/uf_edge_ml_demo/src --device="/dev/video0:/dev/video0" matthiasdr96/app:nano
+```
+
+When running the container, the files will now be synced with the ones on the remote machine which can be modified from the local machine. 

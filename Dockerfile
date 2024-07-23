@@ -1,14 +1,10 @@
-# Using the base image with LT4-Pytorch for Jetpack 5.1.1
-#FROM nvcr.io/nvidia/l4t-pytorch:r35.2.1-pth2.0-py3
+# Using the base image with LT4-Pytorch for Jetpack 5.1.1 and Ultralytics
 FROM ultralytics/ultralytics:latest-jetson-jetpack5
 
-# Otherwise there is an error importing OpenCV ('ImportError: /lib/aarch64-linux-gnu/libgstreamer-1.0.so.0: file too short')
-#RUN apt-get update && apt-get install ffmpeg libsm6 libxext6 -y 
-
-# Install editor
+# Install nano editor
 RUN apt-get install nano
 
-# Set our working directory as app
+# Set the working directory 
 WORKDIR /uf_edge_ml_demo
 
 # Copy the necessary files and directories into the container
@@ -16,8 +12,12 @@ COPY data/ /uf_edge_ml_demo/data/
 COPY models/ /uf_edge_ml_demo/models/
 COPY src/ /uf_edge_ml_demo/src/
 COPY static/ /uf_edge_ml_demo/static/
-COPY templates/ /uf_edge_ml_demo/templates/
-COPY requirements.txt yolov8n-seg.pt yolov8n-cls.pt yolov8n.pt /uf_edge_ml_demo/
+COPY templates/ /uf_edge_ml_demo/templates/ 
+COPY label_studio.sqlite3 requirements.txt yolov8n-seg.pt yolov8n-cls.pt yolov8n.pt /uf_edge_ml_demo/
+
+# Label studio local file sync variables makes automatic syncing of data possible
+ENV LABEL_STUDIO_LOCAL_FILES_SERVING_ENABLED="true"
+ENV LABEL_STUDIO_LOCAL_FILES_DOCUMENT_ROOT="/uf_edge_ml_demo/data"
 
 # Set file permissions
 RUN chmod +x /uf_edge_ml_demo/src/app.py
@@ -25,15 +25,14 @@ RUN chmod +x /uf_edge_ml_demo/src/app.py
 # Upgrade pip and install Python dependencies
 RUN pip3 install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 
-# Label studio local file sync
-ENV LABEL_STUDIO_LOCAL_FILES_SERVING_ENABLED="true"
-ENV LABEL_STUDIO_LOCAL_FILES_DOCUMENT_ROOT="/uf_edge_ml_demo/data"
-
 # Exposing port 8000 from the container
 EXPOSE 8000
+EXPOSE 8080
 EXPOSE 5000
 EXPOSE 6006
 
 # To run the application directly
-#ENTRYPOINT [ "python3" ]
-#CMD ["./src/app.py"]
+#CMD ["python3 ./src/app.py"]
+
+
+

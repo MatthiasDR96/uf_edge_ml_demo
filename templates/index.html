@@ -34,7 +34,9 @@
 
             <div class="label-container">
 
-                <button id="label">Label</button>
+                <button id="new_label">New Labels</button>
+
+                <button id="update_label">Update Labels</button>
 
                 <button id="download_label">Download</button>
                 
@@ -109,8 +111,14 @@
         });
 
         // Label button action
-        document.getElementById('label').addEventListener('click', function() {
-            fetch('/label', { method: 'POST' })
+        document.getElementById('new_label').addEventListener('click', function() {
+            fetch('/new_label', { method: 'POST' })
+            .then(response => response.json())
+        });
+
+        // Label button action
+        document.getElementById('update_label').addEventListener('click', function() {
+            fetch('/update_label', { method: 'POST' })
             .then(response => response.json())
         });
 

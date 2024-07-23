@@ -7,6 +7,7 @@ import time
 import random
 import zipfile
 import webbrowser
+import subprocess
 from utils import *
 from model_yolo import Model
 from label_studio_sdk import Client
@@ -14,11 +15,18 @@ from flask import Flask, render_template, Response, request
 
 # Define the URL where Label Studio is accessible and the API key for your user account
 LABEL_STUDIO_URL = 'http://localhost:8080'
-API_KEY = '40fbbd6b3b72951b085078a24d07a4fca97a62cd' #(ww: Kuleuven8200)
-PROJECT_TITLE = 'uf_edge_ml_model' # Title of the Label studio project that gets created when pressing 'Label'
+API_KEY = 'fe7ea846b9b5113482cbf35af55e03b69fd8c423' #(ww: Kuleuven8200)
+PROJECT_TITLE = 'uf_edge_ml_demo' # Title of the Label studio project that gets created when pressing 'Label'
 
 # Generate Flask app
 app = Flask(__name__, static_folder='../static', template_folder='../templates')
+
+# Start label-studio
+command = ["label-studio", "start", "--port", "8080"]
+process = subprocess.Popen(command)
+
+# Copy label studio database to correct location
+shutil.copy('/uf_edge_ml_demo/label_studio.sqlite3', '/root/.local/share/label-studio/')
 
 # Generate Camera object
 camera = cv2.VideoCapture(0) #"/dev/video0", apiPreference=cv2.CAP_V4L2)  # use 0 for web camera
@@ -186,8 +194,8 @@ def get_textarea():
 
 	return render_template('index.html', options=options, count='x images', status='Not trained', accuracy='0.0%')
 
-@app.route('/label', methods=['POST'])
-def label():
+@app.route('/new_label', methods=['POST'])
+def new_label():
 
 	# Random color generator
 	def generate_random_color():
@@ -196,6 +204,9 @@ def label():
 	# Connect to the Label Studio API
 	ls = Client(url=LABEL_STUDIO_URL, api_key=API_KEY)
 	ls.check_connection()
+
+	# Delete all projects
+	ls.delete_all_projects()
 
 	# Create label config based on classes in data folder
 	labels = os.listdir('./data/raw/')
@@ -207,25 +218,51 @@ def label():
 							</RectangleLabels>
 						</View>'''
 
-	# Get the project with the specified title
+	# Create new project
+	project = ls.create_project(title=PROJECT_TITLE, label_config=label_config)
+
+	# Add local storage
+	project.connect_local_import_storage(local_store_path="/uf_edge_ml_demo/data/raw")
+
+	# Get properties
+	storage_type = project.get_import_storages()[0]['type']
+	storage_id = project.get_import_storages()[0]['id']
+
+	# Sync import storage
+	project.sync_import_storage(storage_type=storage_type, storage_id=storage_id)
+
+	return ('', 204)
+
+
+@app.route('/update_label', methods=['POST'])
+def update_label():
+
+	# Connect to the Label Studio API
+	ls = Client(url=LABEL_STUDIO_URL, api_key=API_KEY)
+	ls.check_connection()
+
+	# Check if the project exists
 	projects = ls.get_projects()
 	project_exists = any(project.title == PROJECT_TITLE for project in projects)
 
-	# Get ID of the project
+	# If project exist
 	if project_exists:
+
+		# Get ID
 		project_id = next(project.id for project in projects if project.title == PROJECT_TITLE)
-		ls.delete_project(project_id)
 
-	# Create new project
-	ls.create_project(
-		title=PROJECT_TITLE,
-		label_config=label_config
-	)
+		# Get the project
+		project = ls.get_project(project_id)
 
-	# Open Label Studio
-	webbrowser.open('http://localhost:8080')
+		# Get properties
+		storage_type = project.get_import_storages()[0]['type']
+		storage_id = project.get_import_storages()[0]['id']
+
+		# Sync import storage
+		project.sync_import_storage(storage_type=storage_type, storage_id=storage_id)
 
 	return ('', 204)
+
 
 @app.route('/download_label', methods=['POST'])
 def download_label():
@@ -256,6 +293,7 @@ def download_label():
 				'annotated': 'only',  # include all tasks with at least one not skipped annotation
 			}
 		)
+		
 		export_id = export_result['id']
 
 		# Wait until the snapshot is ready

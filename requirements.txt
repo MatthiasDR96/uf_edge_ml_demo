@@ -1,6 +1,5 @@
 Flask==3.0.3
-mlflow==2.14.3
 torchmetrics
 torchinfo
-databricks-sdk
 label-studio
+label-studio-sdk
