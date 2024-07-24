@@ -103,7 +103,6 @@ def delete():
 	global classes
 
 	# Remove data folders
-	print(os.listdir('./data/raw'))
 	for dir in os.listdir('./data/raw'): shutil.rmtree('./data/raw/' + dir)
 	classes = []
 
@@ -197,8 +196,7 @@ def get_textarea():
 
 	# Get text
 	text = request.form.get('classes_content')
-	new_classes = text.strip('\r').split("\n")
-	print(new_classes)
+	new_classes = text.strip('\r').replace(' ', '').split("\n")
 
 	# Make new directories
 	for new_class in new_classes: 
@@ -221,8 +219,18 @@ def new_label():
 	ls = Client(url=LABEL_STUDIO_URL, api_key=API_KEY)
 	ls.check_connection()
 
-	# Delete all projects
-	ls.delete_all_projects()
+	# Check if the project exists
+	projects = ls.get_projects()
+	project_exists = any(project.title == PROJECT_TITLE for project in projects)
+
+	# If project exist
+	if project_exists:
+
+		# Get ID
+		project_id = next(project.id for project in projects if project.title == PROJECT_TITLE)
+
+		# Delete all projects
+		ls.delete_project(project_id)
 
 	# Create label config based on classes in data folder
 	labels = os.listdir('./data/raw/')
@@ -328,7 +336,6 @@ def download_label():
 
 		# Json to yolo
 		json_to_yolo(zip_file_path, dest_path)
-
 
 	return ('', 204)
 
