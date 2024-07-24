@@ -33,7 +33,7 @@ EXPOSE 5000
 EXPOSE 6006
 
 # To run the application directly
-#CMD ["python3 ./src/app.py"]
+CMD ["./start.sh"]
 
 
 
