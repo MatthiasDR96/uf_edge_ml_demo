@@ -6,6 +6,71 @@ import shutil
 import numpy as np
 
 
+def json_to_yolo(source_path, dest_path):
+
+    # Load the JSON file
+    with open(source_path, 'r') as f:
+        data = json.load(f)
+
+    # Create directories if they don't exist
+    os.makedirs(dest_path + '/images', exist_ok=True)
+    os.makedirs(dest_path + '/labels', exist_ok=True)
+
+    # Initialize classes and notes
+    classes = []
+    notes = {'categories': []}
+
+    # Process each entry in the JSON file
+    for annotation in data:
+
+        # Get image path
+        image_path = annotation["data"]["image"].split("/")[-1]
+        image_folder = image_path.split('_')[0]
+        full_path = './data/raw/' + image_folder + '/' + image_path
+
+        # Copy the image file to the 'images' directory
+        shutil.copy(full_path, dest_path + '/images')
+
+        # Create a corresponding annotation file in the 'labels' directory
+        with open(f'{dest_path}/labels/{os.path.splitext(os.path.basename(image_path))[0]}.txt', 'w') as f:
+            for label in annotation['annotations']:
+                for result in label['result']:
+
+                    # Get class label
+                    class_label = result['value']['rectanglelabels'][0]
+                    class_id = classes.index(class_label) if class_label in classes else len(classes)
+                    if class_label not in classes: 
+                        classes.append(class_label)
+                        notes['categories'].append({"id": class_id, "name": class_label})
+
+                    # Get bounding box
+                    x = result['value']["x"]
+                    y = result['value']["y"]
+                    width = result['value']["width"]
+                    height = result['value']["height"]
+
+                    # Convert to YOLO format (in percentages)
+                    x_center = (x + width / 2) / 100
+                    y_center = (y + height / 2) / 100
+                    width = width /  100
+                    height = height / 100
+
+                    # Write file
+                    f.write(f"{class_id} {x_center} {y_center} {width} {height}\n")
+
+    # Save classes.txt
+    with open(dest_path + '/classes.txt', 'w') as f:
+        for cls in classes:
+            f.write(f'{cls}\n')
+
+    # Save notes.json
+    with open(dest_path + '/notes.json', 'w') as f:
+        json.dump(notes, f)
+
+    # Remove zip file
+    os.remove(source_path)
+
+
 def overwrite_dataset_yaml():
 
     # Open and read the JSON file

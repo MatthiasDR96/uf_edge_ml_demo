@@ -34,7 +34,7 @@ Once the Docker container runs on the remote host, the webserver can be accessed
 For debugging, you can use the Visual Studio Code’s Remote - SSH extension to connect your local machine to your remote machine and use it as a development environment. This allows you to write code on your local machine, but run it on the remote machine. Copy the files in e.g. the src folder into your remote machine in a folder called e.g. uf_edge_ml_model via ssh:
 
 ```bash
-scp -r ./src nano@ip-address:uf_edge_ml_model  
+scp -r ..\uf_edge_ml_demo\ nano@10.43.11.11:uf_edge_ml_demo  
 ```
 
 When starting the docker container, mount the working volume consisting of the files in / uf_edge_ml_model on the remote machine to the folder in the docker container where these files are located, e.g. /uf_edge_ml_demo/src. 

@@ -13,7 +13,7 @@ COPY models/ /uf_edge_ml_demo/models/
 COPY src/ /uf_edge_ml_demo/src/
 COPY static/ /uf_edge_ml_demo/static/
 COPY templates/ /uf_edge_ml_demo/templates/ 
-COPY label_studio.sqlite3 requirements.txt yolov8n-seg.pt yolov8n-cls.pt yolov8n.pt /uf_edge_ml_demo/
+COPY start.sh label_studio.sqlite3 requirements.txt yolov8n-seg.pt yolov8n-cls.pt yolov8n.pt /uf_edge_ml_demo/
 
 # Label studio local file sync variables makes automatic syncing of data possible
 ENV LABEL_STUDIO_LOCAL_FILES_SERVING_ENABLED="true"
@@ -21,6 +21,7 @@ ENV LABEL_STUDIO_LOCAL_FILES_DOCUMENT_ROOT="/uf_edge_ml_demo/data"
 
 # Set file permissions
 RUN chmod +x /uf_edge_ml_demo/src/app.py
+RUN chmod +x /uf_edge_ml_demo/start.sh
 
 # Upgrade pip and install Python dependencies
 RUN pip3 install --upgrade pip && pip install --no-cache-dir -r requirements.txt

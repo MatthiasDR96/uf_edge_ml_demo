@@ -5,8 +5,6 @@ import os
 import cv2
 import time
 import random
-import zipfile
-import webbrowser
 import subprocess
 from utils import *
 from model_yolo import Model
@@ -15,29 +13,26 @@ from flask import Flask, render_template, Response, request
 
 # Define the URL where Label Studio is accessible and the API key for your user account
 LABEL_STUDIO_URL = 'http://localhost:8080'
-API_KEY = 'fe7ea846b9b5113482cbf35af55e03b69fd8c423' #(ww: Kuleuven8200)
+API_KEY = 'fe7ea846b9b5113482cbf35af55e03b69fd8c423' #(email: ultimate.factory@kuleuven.be; ww: Kuleuven8200)
 PROJECT_TITLE = 'uf_edge_ml_demo' # Title of the Label studio project that gets created when pressing 'Label'
 
 # Generate Flask app
 app = Flask(__name__, static_folder='../static', template_folder='../templates')
 
-# Start label-studio
-command = ["label-studio", "start", "--port", "8080"]
-process = subprocess.Popen(command)
-
-# Copy label studio database to correct location
-shutil.copy('/uf_edge_ml_demo/label_studio.sqlite3', '/root/.local/share/label-studio/')
-
 # Generate Camera object
-camera = cv2.VideoCapture(0) #"/dev/video0", apiPreference=cv2.CAP_V4L2)  # use 0 for web camera
+camera = cv2.VideoCapture(0) # use 0 for web camera
 time.sleep(2.0)
 
-# Generate frames
+# Set global variables
+global classes
 global frame_saved
 global is_training
+
+# Generate frames
 is_training = False
 def generate_frames():
 
+	# Set global variable
 	global frame_saved
 
 	# Loop
@@ -73,8 +68,9 @@ def generate_frames():
 
 @app.route('/')
 def index():
-	options = os.listdir('./data/raw')
-	return render_template('index.html', options=options, count='x images', status='Not trained', accuracy='0.0%')
+	global classes
+	classes = os.listdir('./data/raw')
+	return render_template('index.html', options=classes, count='x images', status='Not trained', accuracy='0.0%')
 
 @app.route('/video')
 def video():
@@ -83,15 +79,11 @@ def video():
 @app.route('/capture', methods=['POST'])
 def capture():
 
-	# Generate frame
+	# Set global variable
 	global frame_saved
 
 	# Get category
-	category = request.form.get('category')
-	category = category.strip('\n')
-
-	# Check if category exist
-	if not os.path.exists('./data/raw/' + category): os.makedirs('./data/raw/' + category)
+	category = request.form.get('category').strip('\n')
 
 	# Generate filename
 	filename = f"{category}_{os.urandom(5).hex()}.jpg"
@@ -107,11 +99,15 @@ def capture():
 @app.route('/delete', methods=['POST'])
 def delete():
 
-	# Remove data folders
-	for dir in os.listdir('./data/raw'): 
-		if os.path.exists('./data/raw/' + dir): shutil.rmtree('./data/raw/' + dir)
+	# Set global variable
+	global classes
 
-	return ('', 204)
+	# Remove data folders
+	print(os.listdir('./data/raw'))
+	for dir in os.listdir('./data/raw'): shutil.rmtree('./data/raw/' + dir)
+	classes = []
+
+	return render_template('index.html', options=classes, count='x images', status='Not trained', accuracy='0.0%')
 
 @app.route('/drop-down-category', methods=['POST'])
 def dropdown_category():
@@ -151,32 +147,43 @@ def train():
 	if not is_training:
 
 		# Do not train if no images exist
-		if not len(os.listdir('./data/raw')) == 0:
-
-			# Set training
-			is_training = True
-
-			# Split the data in train, valid, test datasets
-			split_data('data/raw', ['data/train', 'data/val', 'data/test'])
-
-			# Modify dataset.yaml
-			overwrite_dataset_yaml()
-
-			# Train model
-			try:
-				result = model.model_training()
-			except:
-				is_training = False
-				return {'model_status': 'Error', 'model_accuracy': str(result) + '%'}
-
-			# Set training
-			is_training = False
-
-			return {'model_status': 'Finished', 'model_accuracy': str(result) + '%'}
-		
-		else:
+		if model.type == 'Classification':
 			
-			return {'model_status': 'No data', 'model_accuracy': str(result) + '%'}
+			# Check if data exist
+			if not len(os.listdir('./data/raw')) == 0:
+
+				# Split the data in train, valid, test datasets
+				split_data('data/raw', ['data/train', 'data/val', 'data/test'])
+
+			else:
+
+				return {'model_status': 'No data', 'model_accuracy': str(result) + '%'}
+			
+		elif model.type == "Detection" or model.type == 'Segmentation':
+			
+			if os.path.isfile('./data/detection/notes.json'):
+
+				# Modify dataset.yaml
+				overwrite_dataset_yaml()
+
+			else:
+
+				return {'model_status': 'No data', 'model_accuracy': str(result) + '%'}
+
+		# Set training
+		is_training = True
+
+		# Train model
+		#try:
+		result = model.model_training()
+		#except:
+			#is_training = False
+			#return {'model_status': 'Error', 'model_accuracy': str(result) + '%'}
+
+		# Set training
+		is_training = False
+
+		return {'model_status': 'Finished', 'model_accuracy': str(result) + '%'}
 		
 	else:
 			
@@ -185,14 +192,23 @@ def train():
 @app.route('/classes', methods=['POST'])
 def get_textarea():
 
+	# Get global variable
+	global classes
+
 	# Get text
 	text = request.form.get('classes_content')
-	text = text.strip('\r')
+	new_classes = text.strip('\r').split("\n")
+	print(new_classes)
+
+	# Make new directories
+	for new_class in new_classes: 
+		if not os.path.exists('./data/raw/' + new_class):
+			os.mkdir('./data/raw/' + new_class)
 
 	# Get classes
-	options = text.split("\n")
+	classes = list(set(classes + new_classes))
 
-	return render_template('index.html', options=options, count='x images', status='Not trained', accuracy='0.0%')
+	return render_template('index.html', options=classes, count='x images', status='Not trained', accuracy='0.0%')
 
 @app.route('/new_label', methods=['POST'])
 def new_label():
@@ -271,6 +287,11 @@ def download_label():
 	ls = Client(url=LABEL_STUDIO_URL, api_key=API_KEY)
 	ls.check_connection()
 
+	# Remove dir
+	dest_path = './data/detection'
+	if not os.path.exists(dest_path): os.mkdir(dest_path)
+	shutil.rmtree(dest_path)
+
 	# Check if the project exists
 	projects = ls.get_projects()
 	project_exists = any(project.title == PROJECT_TITLE for project in projects)
@@ -294,26 +315,20 @@ def download_label():
 			}
 		)
 		
-		export_id = export_result['id']
-
 		# Wait until the snapshot is ready
-		while project.export_snapshot_status(export_id).is_in_progress():
+		while project.export_snapshot_status(export_result['id']).is_in_progress():
 			time.sleep(1.0)
 
-		# Download the snapshot
+		# Download the snapshot as JSON
 		status, zip_file_path = project.export_snapshot_download(
-			export_id=export_id,
-			export_type='YOLO',
+			export_id=export_result['id'],
+			export_type='JSON',
 			path='.',
 		)
 
-		# Open the zip file
-		with zipfile.ZipFile('./' + zip_file_path, 'r') as zip_ref:
-			# Extract all the contents of the zip file in current directory
-			zip_ref.extractall(path='./data/detection2')
+		# Json to yolo
+		json_to_yolo(zip_file_path, dest_path)
 
-		# Remove zip file
-		os.remove('./' + zip_file_path)
 
 	return ('', 204)
 

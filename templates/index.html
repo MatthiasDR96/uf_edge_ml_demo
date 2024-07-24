@@ -21,12 +21,12 @@
 
         <div class="main-content">
 
-            <form method="POST" action="/classes">
+            <div id="classes-form">
                 <textarea id="textarea" name="classes_content"></textarea>
                 <div class="submit-container">
                     <input id='submit_button' type="submit">
                 </div>
-            </form>
+            </div>
     
             <div class="video-container">
                 <img id="video" src="{{ url_for('video') }}", alt="Video stream not available", style="max-width:100%; max-height:100%">
@@ -34,11 +34,11 @@
 
             <div class="label-container">
 
-                <button id="new_label">New Labels</button>
+                <button id="new_label">New labels</button>
 
-                <button id="update_label">Update Labels</button>
+                <button id="update_label">Update labels</button>
 
-                <button id="download_label">Download</button>
+                <button id="download_label">Download labels</button>
                 
             </div>
 
@@ -49,7 +49,7 @@
             <div class="left-column">
 
                 <button id="capture">Capture</button>
-
+        
                 <button id="delete">Delete</button>
 
                 <div class="dropdown-content">
@@ -85,7 +85,7 @@
         </div>
 
     </div>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
 
         // Capture button action
@@ -105,10 +105,44 @@
         });
 
         // Delete button action
-        document.getElementById('delete').addEventListener('click', function() {
-            fetch('/delete', { method: 'POST' })
-            .then(response => response.json())
+        $(document).ready(function(){
+            $("#delete").click(function(){
+                $.ajax({
+                    url: '/delete',
+                    type: 'POST',
+                    success: function(response) {
+                        // This will reload the page with the response from the server
+                        location.reload();
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            });
         });
+
+        // Submit button action
+        $(document).ready(function(){
+            $("#submit_button").click(function(e){
+                e.preventDefault();  // Prevent the default form submission
+                $.ajax({
+                    url: '/classes',
+                    type: 'POST',
+                    data: {
+                        'classes_content': $('#textarea').val()  // Include the textarea content
+                    },
+                    success: function(response) {
+                        // This will reload the page with the response from the server
+                        location.reload();
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            });
+        });
+
+
 
         // Label button action
         document.getElementById('new_label').addEventListener('click', function() {
