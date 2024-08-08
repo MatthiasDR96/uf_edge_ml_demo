@@ -1,5 +1,7 @@
 # Ultimate Factory Edge ML Demo
 
+![screenshot](screenshot_interface.png)
+
 ## Installation
 
 Clone this repository to your local working directory.
