@@ -6,18 +6,25 @@ import cv2
 import time
 import random
 import subprocess
-from utils import *
-from model_yolo import Model
+from src.utils import *
+from src.model_yolo import Model
 from label_studio_sdk import Client
 from flask import Flask, render_template, Response, request
 
 # Define the URL where Label Studio is accessible and the API key for your user account
 LABEL_STUDIO_URL = 'http://localhost:8080'
-API_KEY = 'fe7ea846b9b5113482cbf35af55e03b69fd8c423' #(email: ultimate.factory@kuleuven.be; ww: Kuleuven8200)
+API_KEY = 'fe7ea846b9b5113482cbf35af55e03b69fd8c423'
 PROJECT_TITLE = 'uf_edge_ml_demo' # Title of the Label studio project that gets created when pressing 'Label'
 
+# Allow Label Studio to access local data
+os.environ['LOCAL_FILES_SERVING_ENABLED'] = 'true'
+os.environ['LABEL_STUDIO_LOCAL_FILES_DOCUMENT_ROOT'] =  os.path.abspath("./data")
+
+# Start label studio
+subprocess.Popen("label-studio -p 8080 -db ./label_studio.sqlite3")
+
 # Generate Flask app
-app = Flask(__name__, static_folder='../static', template_folder='../templates')
+app = Flask(__name__, static_folder='./static', template_folder='./templates')
 
 # Generate Camera object
 camera = cv2.VideoCapture(0) # use 0 for web camera
@@ -69,6 +76,7 @@ def generate_frames():
 @app.route('/')
 def index():
 	global classes
+	if not os.path.exists('./data/raw'): os.makedirs('./data/raw')
 	classes = os.listdir('./data/raw')
 	return render_template('index.html', options=classes, count='x images', status='Not trained', accuracy='0.0%')
 
@@ -81,6 +89,9 @@ def capture():
 
 	# Set global variable
 	global frame_saved
+
+	# Check if folders exist
+	if len(os.listdir('./data/raw')) == 0: return {'count': 'x'}
 
 	# Get category
 	category = request.form.get('category').strip('\n')
@@ -246,7 +257,7 @@ def new_label():
 	project = ls.create_project(title=PROJECT_TITLE, label_config=label_config)
 
 	# Add local storage
-	project.connect_local_import_storage(local_store_path="/uf_edge_ml_demo/data/raw")
+	project.connect_local_import_storage(local_store_path=os.path.abspath("./data/raw"))
 
 	# Get properties
 	storage_type = project.get_import_storages()[0]['type']

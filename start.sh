@@ -8,4 +8,4 @@ export LABEL_STUDIO_LOCAL_FILES_DOCUMENT_ROOT="/uf_edge_ml_demo/data"
 label-studio -p 8080 -db /uf_edge_ml_demo/label_studio.sqlite3 > /dev/null 2>&1 &
 
 # Copy the SQLite database file
-python3 /uf_edge_ml_demo/src/app.py
+python3 /uf_edge_ml_demo/main.py

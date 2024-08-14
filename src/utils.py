@@ -25,14 +25,14 @@ def json_to_yolo(source_path, dest_path):
 
         # Get image path
         image_path = annotation["data"]["image"].split("/")[-1]
-        image_folder = image_path.split('_')[0]
-        full_path = './data/raw/' + image_folder + '/' + image_path
+        image_folder = image_path.split('=')[1].replace('%5C', '\\')
+        full_path = './data/' + image_folder
 
         # Copy the image file to the 'images' directory
         shutil.copy(full_path, dest_path + '/images')
 
         # Create a corresponding annotation file in the 'labels' directory
-        with open(f'{dest_path}/labels/{os.path.splitext(os.path.basename(image_path))[0]}.txt', 'w') as f:
+        with open(dest_path + '/labels/' + full_path.split("\\")[-1].split('.')[0] + '.txt', 'w') as f:
             for label in annotation['annotations']:
                 for result in label['result']:
 

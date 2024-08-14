@@ -17,6 +17,11 @@ class Model():
 		self.conf = 0.5
 		self.iou = 0.5
 
+		# Preload models
+		self.model = YOLO('yolov8n.pt')
+		self.model = YOLO('yolov8n-cls.pt') 
+		self.model = YOLO('yolov8n-seg.pt')
+		
 		# Select model
 		self.model_change()
 
