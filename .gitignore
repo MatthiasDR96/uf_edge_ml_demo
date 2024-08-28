@@ -8,6 +8,4 @@ models/segment/
 data/test/
 data/train/
 data/val/
-data/detection
-data/raw
 *.cache

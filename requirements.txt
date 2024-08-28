@@ -3,4 +3,3 @@ torchmetrics
 torchinfo
 label-studio
 label-studio-sdk
-ultralytics

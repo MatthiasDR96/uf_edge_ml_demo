@@ -1,6 +1,5 @@
 names:
-  '0': Apple
-  '1': Bottle
+  '0': Onefuse
 test: ./detection/images
 train: ./detection/images
 val: ./detection/images

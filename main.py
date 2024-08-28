@@ -16,13 +16,6 @@ LABEL_STUDIO_URL = 'http://localhost:8080'
 API_KEY = 'fe7ea846b9b5113482cbf35af55e03b69fd8c423'
 PROJECT_TITLE = 'uf_edge_ml_demo' # Title of the Label studio project that gets created when pressing 'Label'
 
-# Allow Label Studio to access local data
-os.environ['LOCAL_FILES_SERVING_ENABLED'] = 'true'
-os.environ['LABEL_STUDIO_LOCAL_FILES_DOCUMENT_ROOT'] =  os.path.abspath("./data")
-
-# Start label studio
-subprocess.Popen("label-studio -p 8080 -db ./label_studio.sqlite3")
-
 # Generate Flask app
 app = Flask(__name__, static_folder='./static', template_folder='./templates')
 
