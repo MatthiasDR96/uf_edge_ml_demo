@@ -2,9 +2,6 @@
 *.pt
 __pycache__/
 runs/
-models/classify/
-models/detect/
-models/segment/
 data/test/
 data/train/
 data/val/

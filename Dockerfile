@@ -13,7 +13,7 @@ COPY models/ /uf_edge_ml_demo/models/
 COPY src/ /uf_edge_ml_demo/src/
 COPY static/ /uf_edge_ml_demo/static/
 COPY templates/ /uf_edge_ml_demo/templates/ 
-COPY start.sh main.py label_studio.sqlite3 requirements.txt yolov8n-seg.pt yolov8n-cls.pt yolov8n.pt /uf_edge_ml_demo/
+COPY start.sh main.py label_studio.sqlite3 requirements.txt /uf_edge_ml_demo/
 
 # Label studio local file sync variables makes automatic syncing of data possible
 ENV LABEL_STUDIO_LOCAL_FILES_SERVING_ENABLED="true"
@@ -33,7 +33,7 @@ EXPOSE 5000
 EXPOSE 6006
 
 # To run the application directly
-CMD ["./start.sh"]
+#CMD ["./start.sh"]
 
 
 
